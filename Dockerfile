@@ -16,6 +16,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y --fix-missing install apache2 \
       libapache2-mod-php \
       curl \
       php-curl \
+      php-acpu \
+      php7.0-opcache \
       apt-transport-https \
       nano \
       lynx-cur
