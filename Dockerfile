@@ -1,5 +1,5 @@
 FROM ubuntu:16.04
-MAINTAINER Francisco Carmona <fcarmona.olmedo@gmail.com>
+MAINTAINER btstream <btstream@hotmail.com>
 
 # Environments vars
 ENV TERM=xterm
@@ -10,16 +10,9 @@ RUN apt-get -y upgrade
 # Packages installation
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y --fix-missing install apache2 \
       php \
-      php-cli \
-      php-gd \
-      php-json \
-      php-mbstring \
-      php-xml \
-      php-xsl \
-      php-zip \
-      php-soap \
-      php-pear \
-      php-mcrypt \
+      php-gd php-json php-mysql php-curl php-mbstring \
+      php-intl php-mcrypt php-imagick php-xml php-zip \
+      php-ldap \
       libapache2-mod-php \
       curl \
       php-curl \
@@ -35,7 +28,7 @@ RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 
 # Update the default apache site with the config we created.
-ADD config/apache/apache-virtual-hosts.conf /etc/apache2/sites-enabled/000-default.conf
+ADD config/apache/apache-virtual-hosts.conf /etc/apache2/sites-available/001-default.conf
 ADD config/apache/apache2.conf /etc/apache2/apache2.conf
 ADD config/apache/ports.conf /etc/apache2/ports.conf
 ADD config/apache/envvars /etc/apache2/envvars
@@ -57,7 +50,7 @@ RUN chown -R www-data:www-data /var/www
 WORKDIR /var/www/
 
 # Volume
-VOLUME /var/www
+VOLUME /var/www /etc/apache2/sites-enabled
 
 # Ports: apache2
 EXPOSE 80
