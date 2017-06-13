@@ -20,7 +20,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y --fix-missing install apache2 \
       php7.0-opcache \
       apt-transport-https \
       nano \
-      lynx-cur
+      lynx-cur \
+      cron
 
 RUN a2enmod rewrite
 RUN phpenmod mcrypt
@@ -28,6 +29,8 @@ RUN phpenmod mcrypt
 # Composer install
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
+
+RUN echo '*/15  *  *  *  * php -f /var/www/nextcloud/cron.php' > /var/spool/cron/crontabs/www-data
 
 # Update the default apache site with the config we created.
 ADD config/apache/apache-virtual-hosts.conf /etc/apache2/sites-available/001-default.conf
